@@ -1,9 +1,12 @@
 const PushAPI =require("@pushprotocol/restapi");
 const ethers= require("ethers");
-const PK = '16db23b0912c1bf92052284511f025f3774023e20a031d0cc093b81dbaabec69'; // channel private key
+const config = require("./config")
+const PK = config.channelPrivateKey; // channel private key
 const Pkey = `0x${PK}`;
 const signer = new ethers.Wallet(Pkey);
-const sendNotification = async() => {
+
+
+module.exports.sendNotification = async(add) => {
   try {
     // apiResponse?.status === 204, if sent successfully!
 const apiResponse = await PushAPI.payloads.sendNotification({
@@ -11,23 +14,23 @@ const apiResponse = await PushAPI.payloads.sendNotification({
   type: 4, // subset
   identityType: 2, // direct payload
   notification: {
-    title: `[SDK-TEST] notification TITLE:`,
-    body: `[sdk-test] notification BODY`
+    title: `🔔Your stake at compund if aabout to liquidate🔔`,
+    body: `kindly refill or withdraw`
   },
   payload: {
     title: `[sdk-test] payload title`,
-    body: `sample msg body`,
-    cta: '',
-    img: ''
+    body: `hello world`,
+    cta: '', // yet to be added for Compound
+    img: '' //
   },
-  recipients: ['eip155:5:0x032e76a97513d6Fba413B9AA908B663424727e05'], // recipients addresses
-  channel: 'eip155:5:0x32FAb1A2178e0013c82Ce58f2fEA6e2469090bCB', // your channel address
+  recipients: [add], // recipients addresses
+  channel: `eip155:5:${config.ChannelId}`, // your channel address
   env: 'staging'
 });
     // apiResponse?.status === 204, if sent successfully!
-    console.log('API repsonse: ', apiResponse);
+    console.log('API repsonse: ', apiResponse.config.data);
   } catch (err) {
     console.error('Error: ', err);
   }
 }
-sendNotification();
+// sendNotification();

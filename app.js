@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { PORT } = require('./config');
+const notif=require("./controllers/notif")
 // const mysqlDb = require('./database/blockchain_analytics/db');
 // const mssqlDb = require('./database/zebpay_mssql/db');
 // const mysqlBlockchainAuditDb = require('./database/blockchain_audit/db');
@@ -46,19 +47,9 @@ const { PORT } = require('./config');
             res.send('I am alive.');
         });
 
-        // app.use('/refill', authMiddleware.authenticateToken, authMiddleware.checkRole('refill'), refillRoute);
-        // app.use('/wallet', authMiddleware.authenticateToken, authMiddleware.checkRole('audit'), walletRoute);
-        // app.use('/monitor', monitorRoute);
-        // app.use('/user', userRoute);
-        // app.use('/wallets', authMiddleware.authenticateToken, walletsRoute);
-
         app.listen(PORT, function () {
             console.log('app listening on port: ' + PORT);
+            setInterval(notif.checkandSendNotification, 10000);
         });
 
-        // service.initiateServices(); 
-    // } catch (e) {
-        // console.error('Something went wrong while running the server.', e);
-//     }
-// }
-// startProcess();
+
