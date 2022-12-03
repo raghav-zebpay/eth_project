@@ -45,6 +45,7 @@ module.exports.checkandSendNotification=async function(){
             let res = await compound.checkisLiquidatable(add[i].address);
             // console.log(add[i].address);
             console.log("Add:- ", add[i].address, " Response:-",res)
+            // res = true
             if (res) {
                 if (add[i].sendNotif === 0) {
                     await push.sendNotification(add[i].address)
