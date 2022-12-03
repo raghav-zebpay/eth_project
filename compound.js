@@ -9,6 +9,7 @@ const myContractAbi = [
   'function getTvl() public view returns (uint)',
 ];
 const cometAddress = "0x3EE77595A8459e93C2888b13aDB354017B198188"
+// const cometAddress = "0xAAD4992D949f9214458594dF92B44165Fb84dC19";
 const cometAbi = [
 'function isLiquidatable(address account) virtual public view returns (bool)',
   'function numAssets() returns (uint8)',
@@ -20,13 +21,14 @@ const cometAbi = [
   'function getPrice(address) public view returns (uint128)',
 ];
  const comet = new ethers.Contract(cometAddress, cometAbi, provider);
-const comet1 = new ethers.Contract(contractAddress, abiJson, provider);
+//const comet1 = new ethers.Contract(contractAddress, abiJson, provider);
 // console.log(comet);
 
 module.exports.checkisLiquidatable=async function(add){
     return new Promise(async(resolve, reject) => {
         try{    
             // console.log("I am here")
+            // return;
             var res=await comet.isLiquidatable('0x032e76a97513d6Fba413B9AA908B663424727e05');
             // console.log(res)
             resolve(res)

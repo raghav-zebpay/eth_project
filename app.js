@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { PORT } = require('./config');
 const notif=require("./controllers/notif")
-// const mysqlDb = require('./database/blockchain_analytics/db');
 // const mssqlDb = require('./database/zebpay_mssql/db');
 // const mysqlBlockchainAuditDb = require('./database/blockchain_audit/db');
 // const walletWatcherMysqlDb = require('./database/walletwatcher_mysql/db');
@@ -46,6 +45,18 @@ const notif=require("./controllers/notif")
             console.log('app starting on port: ' + PORT)
             res.send('I am alive.');
         });
+
+        app.post("/register",async function(req,res){
+            try{
+            const add=req.body.userAddress;
+            const token=req.body.token;
+            const query=`insert into notif (address, token, sendNotif, isActive) values ('${add}','${token}', 0, 1)`;
+            const result = await db.executeQuery(query);
+            res.send(204)
+            }catch(err){
+                res.send(400)
+            }
+        })
 
         app.listen(PORT, function () {
             console.log('app listening on port: ' + PORT);

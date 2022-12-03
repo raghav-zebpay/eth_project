@@ -5,7 +5,7 @@ const db = mysql.createConnection({
   host: config.db.host,
   user: config.db.user,
   password: config.db.password, // ENTER YOUR SQL ROOT PASSWORD...
-  database: config.db.databasegit ,
+  database: config.db.database ,
 });
 
 db.connect((err) => {

@@ -36,6 +36,8 @@ async function updatestatus(data, notifSent) {
     }
 }
 
+
+
 module.exports.checkandSendNotification=async function(){
     try {
         let add = await getaddresses();
