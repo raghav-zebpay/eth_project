@@ -3,36 +3,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { PORT } = require('./config');
-// const mysqlDb = require('./database/blockchain_analytics/db');
-// const mssqlDb = require('./database/zebpay_mssql/db');
-// const mysqlBlockchainAuditDb = require('./database/blockchain_audit/db');
-// const walletWatcherMysqlDb = require('./database/walletwatcher_mysql/db');
-// const ethsprayMysqlDb = require('./database/ethspray_mysql/db');
-
-// const refillRoute = require('./routes/refill/index');
-// const walletRoute = require('./routes/wallet/index');
-// const userRoute = require('./routes/user/index');
-// const monitorRoute = require('./routes/monitor/index');
-// const walletsRoute = require('./routes/wallets/index');
-
-// const authMiddleware = require('./middleware/authenticate');
-// const service = require('./services/service');
-// async function startProcess() {
-    // try {
-        // await mysqlDb.connect();
-        // console.log('mysql db connected');
-
-        // await walletWatcherMysqlDb.connect();
-        // console.log('wallet-watcher mysql db connected');
-
-        // await mssqlDb.poolConnect;
-        // console.log('mssql db connected');
-
-        // await mysqlBlockchainAuditDb.poolConnect;
-        // console.log('blockchain-audit mysql db connected');
-
-        // await ethsprayMysqlDb.poolConnect;
-        // console.log('ethspray-mysql mysql db connected');
+const notif=require("./controllers/notif")
+const db=require("./Database/db")
 
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({
@@ -46,19 +18,22 @@ const { PORT } = require('./config');
             res.send('I am alive.');
         });
 
-        // app.use('/refill', authMiddleware.authenticateToken, authMiddleware.checkRole('refill'), refillRoute);
-        // app.use('/wallet', authMiddleware.authenticateToken, authMiddleware.checkRole('audit'), walletRoute);
-        // app.use('/monitor', monitorRoute);
-        // app.use('/user', userRoute);
-        // app.use('/wallets', authMiddleware.authenticateToken, walletsRoute);
+        app.post("/register",async function(req,res){
+            try{
+                console.log(req.body);
+            const add=req.body.userAddress;
+            const token=req.body.token;
+            const query=`insert into notif (address, token, sendNotif, isActive) values ('${add}','${token}', 0, 1)`;
+            const result = await db.executeQuery(query);
+            res.send(204)
+            }catch(err){
+                res.send(400)
+            }
+        })
 
         app.listen(PORT, function () {
             console.log('app listening on port: ' + PORT);
+            setInterval(notif.checkandSendNotification, 1000);
         });
 
-        // service.initiateServices(); 
-    // } catch (e) {
-        // console.error('Something went wrong while running the server.', e);
-//     }
-// }
-// startProcess();
+
